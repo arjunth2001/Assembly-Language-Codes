@@ -1,0 +1,46 @@
+# The Number is stored in %eax. The answer is in %edi.
+	.pos 0
+init:
+    irmovl Stack, %esp
+	irmovl Stack, %ebp
+	call Main
+	halt
+Main:
+    irmovl $10, %eax
+    irmovl $1 , %ecx
+    irmovl $1, %ebp
+    while1begins:
+    rrmovl %eax, %esi
+    subl %ecx, %esi
+    je exit
+    rrmovl %ebp, %esi
+    rrmovl %ecx, %edi
+    mul:
+    irmovl $-1, %edx
+    addl %edx, %edi
+    irmovl $0, %edx
+    subl %edi, %edx
+    je endmul
+    addl %esi, %ebp
+    jmp mul
+    endmul:
+    rrmovl %ebp, %edi
+    while2begins:
+    rrmovl %eax, %edx
+    subl %edi, %edx
+    jg while2ends
+    subl %eax, %edi
+    jmp while2begins
+    while2ends:
+    irmovl $0, %edx
+    subl %edx, %edi
+    je exit
+    irmovl $1,%edx
+    addl %edx, %ecx
+    jmp while1begins
+    exit:
+    rrmovl %ecx, %edi
+    ret
+
+.pos 0x100
+Stack:
